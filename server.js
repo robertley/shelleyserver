@@ -3,10 +3,12 @@ const bodyParser = require('body-parser')
 const mysql = require('mysql');
 
 const store = require('./store')
+var cors = require('cors')
 
 const app = express()
 app.use(express.static('public'))
 app.use(bodyParser.json())
+app.use(cors())
 app.post('/createEvent', (req, res) => {
   store
     .createEvent({
@@ -49,7 +51,8 @@ app.get('/getEvents/NewYorkCity', (req, res) => {
       console.log('Connected to database.')}
     )
     
-    var sql = `SELECT * FROM shelleysite.events WHERE city = 1`
+    // var sql = `SELECT * FROM shelleysite.events WHERE city = 1`
+    var sql = `SELECT * FROM ebdb.test_table;`
     console.log(sql)
     connection.query(sql, function (err, result) {
       if (err) throw err
@@ -60,6 +63,6 @@ app.get('/getEvents/NewYorkCity', (req, res) => {
     connection.end()
 })
 
-app.listen(8080, () => {
-  console.log('Server running on http://localhost:8080')
+app.listen(8081, () => {
+  console.log('Server running on http://localhost:8081')
 })
