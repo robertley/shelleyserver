@@ -1,0 +1,6 @@
+{
+    "host"     : "aa73nls1d0uvyp.ccrpnpe8qc1r.us-west-2.rds.amazonaws.com",
+    "user"     : "shelley",
+    "password" : "shelleysite",
+    "port"     : "3306"
+}
