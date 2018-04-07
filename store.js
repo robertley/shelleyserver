@@ -3,7 +3,7 @@ var config = require('./config.json')
 
 module.exports = {
   
-  createEvent ({ title, description, location, date, image, city, cause, link, contact }) {
+  createEvent ({ title, description, location, date, image, city, cause, link, contact, isPosted }) {
 
     var connection = mysql.createConnection({
       host     : config.host,
@@ -20,12 +20,42 @@ module.exports = {
       console.log('Connected to database.')}
     )
     
-    var sql = `INSERT INTO ebdb.events (title, description, location, date, image, city, cause, link, contact)
-              VALUES ('${title}', '${description}', '${location}', '${date}', '${image}', '${city}', '${cause}', '${link}', '${contact}');`
+    var sql = `INSERT INTO ebdb.events (title, description, location, date, image, city, cause, link, contact, is_posted)
+              VALUES ('${title}', '${description}', '${location}', '${date}', '${image}', '${city}', '${cause}', '${link}', '${contact}', '${isPosted}');`
     console.log(sql)
     connection.query(sql, function (err, result) {
       if (err) throw err
       console.log("1 record inserted")
+    })
+
+    connection.end()
+
+    return Promise.resolve()
+  },
+
+  adminEditEvent ({ title, description, location, date, image, city, cause, link, contact, id }) {
+
+    var connection = mysql.createConnection({
+      host     : config.host,
+      user     : config.user,
+      password : config.password,
+      port     : config.port
+    })
+
+    connection.connect(function(err) {
+      if (err) {
+        console.error('Database connection failed: ' + err.stack);
+        return
+      }
+      console.log('Connected to database.')}
+    )
+    
+    var sql = `UPDATE ebdb.events SET is_posted='1', title='${title}', description='${description}', location='${location}', date='${date}', image='${image}', city='${city}', cause='${cause}', link='${link}', contact='${contact}'
+              WHERE id='${id}';`
+    console.log(sql)
+    connection.query(sql, function (err, result) {
+      if (err) throw err
+      console.log("1 record updated")
     })
 
     connection.end()
