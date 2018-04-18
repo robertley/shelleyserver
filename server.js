@@ -16,7 +16,8 @@ app.post('/createEvent', (req, res) => {
       title: req.body.title,
       description: req.body.description,
       location: req.body.location,
-      date: req.body.date,
+      startDate: req.body.startDate,
+      endDate: req.body.endDate,
       image: req.body.image,
       city: req.body.city,
       cause: req.body.cause,
@@ -34,7 +35,8 @@ app.post('/adminEditEvent', (req, res) => {
       title: req.body.title,
       description: req.body.description,
       location: req.body.location,
-      date: req.body.date,
+      startDate: req.body.startDate,
+      endDate: req.body.endDate,
       image: req.body.image,
       city: req.body.city,
       cause: req.body.cause,
@@ -76,7 +78,7 @@ app.get('/getEvents/', (req, res) => {
       var sql = `SELECT * FROM ebdb.events WHERE city = ${cityId} AND is_posted = 0`
     }
     else if (upcoming === "true") {
-      var sql = `SELECT * FROM ebdb.events WHERE city = ${cityId} AND date >= CURDATE() AND is_posted = 1 ORDER BY date DESC;`
+      var sql = `SELECT * FROM ebdb.events WHERE city = ${cityId} AND start_date >= CURDATE() AND is_posted = 1 ORDER BY start_date DESC;`
     }
     else {
       var sql = `SELECT * FROM ebdb.events WHERE city = ${cityId} AND is_posted = 1;`

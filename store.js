@@ -3,7 +3,7 @@ var config = require('./config.json')
 
 module.exports = {
   
-  createEvent ({ title, description, location, date, image, city, cause, link, contact, isPosted }) {
+  createEvent ({ title, description, location, startDate, endDate, image, city, cause, link, contact, isPosted }) {
 
     var connection = mysql.createConnection({
       host     : config.host,
@@ -20,8 +20,8 @@ module.exports = {
       console.log('Connected to database.')}
     )
     
-    var sql = `INSERT INTO ebdb.events (title, description, location, date, image, city, cause, link, contact, is_posted)
-              VALUES ('${title}', '${description}', '${location}', '${date}', '${image}', '${city}', '${cause}', '${link}', '${contact}', '${isPosted}');`
+    var sql = `INSERT INTO ebdb.events (title, description, location, start_date, end_date, image, city, cause, link, contact, is_posted)
+              VALUES ('${title}', '${description}', '${location}', date_add('${startDate}', interval 4 hour), date_add('${endDate}', interval 4 hour), '${image}', '${city}', '${cause}', '${link}', '${contact}', '${isPosted}');`
     console.log(sql)
     connection.query(sql, function (err, result) {
       if (err) throw err
@@ -33,7 +33,7 @@ module.exports = {
     return Promise.resolve()
   },
 
-  adminEditEvent ({ title, description, location, date, image, city, cause, link, contact, id }) {
+  adminEditEvent ({ title, description, location, startDate, endDate, image, city, cause, link, contact, id }) {
 
     var connection = mysql.createConnection({
       host     : config.host,
@@ -50,7 +50,7 @@ module.exports = {
       console.log('Connected to database.')}
     )
     
-    var sql = `UPDATE ebdb.events SET is_posted='1', title='${title}', description='${description}', location='${location}', date='${date}', image='${image}', city='${city}', cause='${cause}', link='${link}', contact='${contact}'
+    var sql = `UPDATE ebdb.events SET is_posted='1', title='${title}', description='${description}', location='${location}', date_add('${startDate}', interval 4 hour), date_add('${endDate}', interval 4 hour), image='${image}', city='${city}', cause='${cause}', link='${link}', contact='${contact}'
               WHERE id='${id}';`
     console.log(sql)
     connection.query(sql, function (err, result) {
