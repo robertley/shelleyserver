@@ -16,8 +16,8 @@ app.post('/createEvent', (req, res) => {
       title: req.body.title,
       description: req.body.description,
       location: req.body.location,
-      startDate: req.body.startDate,
-      endDate: req.body.endDate,
+      startDate: req.body.date,
+      endDate: req.body.untilDate,
       image: req.body.image,
       city: req.body.city,
       cause: req.body.cause,
@@ -35,8 +35,8 @@ app.post('/adminEditEvent', (req, res) => {
       title: req.body.title,
       description: req.body.description,
       location: req.body.location,
-      startDate: req.body.startDate,
-      endDate: req.body.endDate,
+      date: req.body.date,
+      untilDate: req.body.untilDate,
       image: req.body.image,
       city: req.body.city,
       cause: req.body.cause,
@@ -75,13 +75,13 @@ app.get('/getEvents/', (req, res) => {
     
     // var sql = `SELECT * FROM shelleysite.events WHERE city = 1`
     if (admin === "true") {
-      var sql = `SELECT * FROM ebdb.events WHERE city = ${cityId} AND is_posted = 0`
+      var sql = `SELECT * FROM studentact.events WHERE city = ${cityId} AND is_posted = 0`
     }
     else if (upcoming === "true") {
-      var sql = `SELECT * FROM ebdb.events WHERE city = ${cityId} AND start_date >= CURDATE() AND is_posted = 1 ORDER BY start_date DESC;`
+      var sql = `SELECT * FROM studentact.events WHERE city = ${cityId} AND start_date >= CURDATE() AND is_posted = 1 ORDER BY start_date DESC;`
     }
     else {
-      var sql = `SELECT * FROM ebdb.events WHERE city = ${cityId} AND is_posted = 1;`
+      var sql = `SELECT * FROM studentact.events WHERE city = ${cityId} AND is_posted = 1;`
     }
     console.log(sql)
     connection.query(sql, function (err, result) {
@@ -115,7 +115,7 @@ app.get('/getEventById/', (req, res) => {
     console.log('Connected to database.')}
   )
   
-  var sql = `SELECT * FROM ebdb.events WHERE id = ${eventId};`
+  var sql = `SELECT * FROM studentact.events WHERE id = ${eventId};`
 
   console.log(sql)
   connection.query(sql, function (err, result) {
@@ -168,8 +168,9 @@ app.get('/getAdminInfo/', (req, res) => {
   
   var counts = []
 
-  var sql = `SELECT COUNT(*) AS count FROM ebdb.events WHERE city = '1' AND is_posted = 0 UNION
-            SELECT COUNT(*) AS count FROM ebdb.events WHERE city = '2' AND is_posted = 0;`
+  var sql = `SELECT COUNT(*) AS count FROM studentact.events WHERE city = '1' AND is_posted = 0 UNION ALL
+            SELECT COUNT(*) AS count FROM studentact.events WHERE city = '2' AND is_posted = 0 UNION ALL
+            SELECT COUNT(*) AS count FROM studentact.events WHERE city = '3' AND is_posted = 0;`
 
   console.log(sql)
   connection.query(sql, function (err, result) {
@@ -201,7 +202,7 @@ app.get('/approveEvent/', (req, res) => {
     console.log('Connected to database.')}
   )
 
-  var sql = `UPDATE ebdb.events SET is_posted='1' WHERE id='${eventId}';`
+  var sql = `UPDATE studentact.events SET is_posted='1' WHERE id='${eventId}';`
 
 
   console.log(sql)
@@ -233,7 +234,7 @@ app.get('/deleteEvent/', (req, res) => {
     console.log('Connected to database.')}
   )
 
-  var sql = `DELETE FROM ebdb.events WHERE id='${eventId}';`
+  var sql = `DELETE FROM studentact.events WHERE id='${eventId}';`
 
   console.log(sql)
   connection.query(sql, function (err, result) {
